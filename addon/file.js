@@ -130,7 +130,7 @@ export default EmberObject.extend({
     Object.defineProperty(this, 'id', {
       writeable: false,
       enumerable: true,
-      value: `file-${uuid()}`
+      value: uuid()
     });
   },
 
