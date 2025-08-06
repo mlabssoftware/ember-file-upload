@@ -325,17 +325,14 @@ export default BaseComponent.extend({
     this[DATA_TRANSFER] = null;
   },
 
-  // ✅ NOVA FUNÇÃO: Debounce para desativação
   _deactivateWithDebounce() {
-    // Cancelar timer existente
     if (this._deactivateTimer) {
       cancel(this._deactivateTimer);
     }
 
-    // Agendar desativação com delay
     this._deactivateTimer = next(this, () => {
       set(this, 'active', false);
       this._deactivateTimer = null;
-    }, 150); // 150ms delay
+    }, 150);
   }
 });
