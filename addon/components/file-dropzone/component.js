@@ -239,7 +239,7 @@ export default BaseComponent.extend({
       if (get(this, 'isDestroyed')) {
         return;
       }
-      set(this, 'active', false);
+      this._deactivateWithDebounce();
     }
   },
 
@@ -247,6 +247,13 @@ export default BaseComponent.extend({
     set(this[DATA_TRANSFER], 'dataTransfer', evt.dataTransfer);
     if (this.isAllowed()) {
       evt.dataTransfer.dropEffect = get(this, 'cursor');
+      
+      if (this.get('active')) {
+        if (this._deactivateTimer) {
+          clearTimeout(this._deactivateTimer);
+          this._deactivateTimer = null;
+        }
+      }
     }
   },
 
@@ -323,5 +330,20 @@ export default BaseComponent.extend({
     set(this, 'active', false);
     get(this, 'queue')._addFiles(get(this[DATA_TRANSFER], 'files'), 'drag-and-drop');
     this[DATA_TRANSFER] = null;
+  },
+
+  _deactivateWithDebounce() {
+    this._clearDeactivateTimer();    
+    this._deactivateTimer = setTimeout(() => {
+      set(this, 'active', false);
+      this._deactivateTimer = null;
+    }, 100);
+  },
+
+  _clearDeactivateTimer() {
+    if (this._deactivateTimer) {
+      clearTimeout(this._deactivateTimer);
+      this._deactivateTimer = null;
+    }
   }
 });
