@@ -239,7 +239,7 @@ export default BaseComponent.extend({
       if (get(this, 'isDestroyed')) {
         return;
       }
-      set(this, 'active', false);
+      this._deactivateWithDebounce();
     }
   },
 
@@ -323,5 +323,19 @@ export default BaseComponent.extend({
     set(this, 'active', false);
     get(this, 'queue')._addFiles(get(this[DATA_TRANSFER], 'files'), 'drag-and-drop');
     this[DATA_TRANSFER] = null;
+  },
+
+  // ✅ NOVA FUNÇÃO: Debounce para desativação
+  _deactivateWithDebounce() {
+    // Cancelar timer existente
+    if (this._deactivateTimer) {
+      cancel(this._deactivateTimer);
+    }
+
+    // Agendar desativação com delay
+    this._deactivateTimer = next(this, () => {
+      set(this, 'active', false);
+      this._deactivateTimer = null;
+    }, 150); // 150ms delay
   }
 });
