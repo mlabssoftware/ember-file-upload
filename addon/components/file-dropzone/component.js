@@ -1,7 +1,7 @@
 /* global Blob, Uint8Array */
 import BaseComponent from '../base-component';
 
-import { bind } from '@ember/runloop';
+import { bind, next, cancel } from '@ember/runloop';
 import { set, get } from '@ember/object';
 import { getOwner } from '@ember/application';
 import layout from './template';
